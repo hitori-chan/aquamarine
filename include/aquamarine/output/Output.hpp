@@ -89,6 +89,7 @@ namespace Aquamarine {
             hdr_output_metadata                            hdrMetadata    = {};
             uint16_t                                       contentType    = DRM_MODE_CONTENT_TYPE_GRAPHICS;
             eOutputColorRange                              colorRange     = AQ_OUTPUT_COLOR_RANGE_AUTO;
+            Hyprutils::Math::Vector2D                      bufferPos; // px; only atomic DRM places a buffer, elsewhere test() fails
         };
 
         class CSnapshot {
@@ -129,6 +130,7 @@ namespace Aquamarine {
         void                  setCustomMode(Hyprutils::Memory::CSharedPointer<SOutputMode> mode);
         void                  setFormat(uint32_t drmFormat);
         void                  setBuffer(Hyprutils::Memory::CSharedPointer<IBuffer> buffer);
+        void                  setBuffer(Hyprutils::Memory::CSharedPointer<IBuffer> buffer, const Hyprutils::Math::Vector2D& pos);
         void                  setExplicitInFence(int32_t fenceFD); // -1 removes
         void                  enableExplicitOutFenceForNextCommit();
         void                  resetExplicitFences();

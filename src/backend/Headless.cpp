@@ -25,6 +25,8 @@ Aquamarine::CHeadlessOutput::~CHeadlessOutput() {
 }
 
 bool Aquamarine::CHeadlessOutput::commit() {
+    if (!test())
+        return false;
     const auto snapshot = state->snapshot();
     events.commit.emit();
     state->consume(snapshot);
@@ -34,7 +36,7 @@ bool Aquamarine::CHeadlessOutput::commit() {
 }
 
 bool Aquamarine::CHeadlessOutput::test() {
-    return true;
+    return state->state().bufferPos == Hyprutils::Math::Vector2D{};
 }
 
 std::vector<SDRMFormat> Aquamarine::CHeadlessOutput::getRenderFormats() {

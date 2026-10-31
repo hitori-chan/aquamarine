@@ -121,7 +121,7 @@ bool Aquamarine::CDRMAtomicRequest::restateConnectors(SP<SDRMConnector> self) {
             // head we are restating rather than ours.
             const auto saved = conn;
             conn             = c;
-            planeProps(c->crtc->primary, c->crtc->primary->front, c->crtc->id, {}, c->atomic.colorRange);
+            planeProps(c->crtc->primary, c->crtc->primary->front, c->crtc->id, c->atomic.bufferPos, c->atomic.colorRange);
             conn = saved;
         }
 
@@ -320,7 +320,7 @@ void Aquamarine::CDRMAtomicRequest::addConnector(Hyprutils::Memory::CSharedPoint
         if (connector->crtc->props.values.vrr_enabled)
             add(connector->crtc->id, connector->crtc->props.values.vrr_enabled, (uint64_t)STATE.adaptiveSync);
 
-        planeProps(connector->crtc->primary, data.mainFB, connector->crtc->id, {}, STATE.colorRange);
+        planeProps(connector->crtc->primary, data.mainFB, connector->crtc->id, STATE.bufferPos, STATE.colorRange);
 
         if (connector->output->supportsExplicit && (data.committed & COutputState::AQ_OUTPUT_STATE_EXPLICIT_IN_FENCE) && STATE.explicitInFence >= 0)
             add(connector->crtc->primary->id, connector->crtc->primary->props.values.in_fence_fd, STATE.explicitInFence);
@@ -495,6 +495,7 @@ void Aquamarine::CDRMAtomicImpl::finalizeAsync(CDRMAtomicRequest& request, SP<SD
     connector->atomic.crtcID      = data.atomic.crtcID;
     connector->atomic.propsCached = true;
     connector->atomic.colorRange  = data.outputState.colorRange;
+    connector->atomic.bufferPos   = data.outputState.bufferPos;
     connector->atomic.vrrEnabled  = data.outputState.adaptiveSync;
     connector->output->vrrActive  = data.outputState.adaptiveSync;
     if (data.atomic.ctmd)
@@ -675,6 +676,7 @@ bool Aquamarine::CDRMAtomicImpl::commit(Hyprutils::Memory::CSharedPointer<SDRMCo
                 connector->atomic.crtcID      = data.atomic.crtcID;
                 connector->atomic.propsCached = true;
                 connector->atomic.colorRange  = data.outputState.colorRange;
+                connector->atomic.bufferPos   = data.outputState.bufferPos;
                 if (data.atomic.ctmd)
                     connector->crtc->atomic.ctmStateKnown = true;
 
@@ -724,6 +726,7 @@ bool Aquamarine::CDRMAtomicImpl::commit(Hyprutils::Memory::CSharedPointer<SDRMCo
             connector->atomic.crtcID      = data.atomic.crtcID;
             connector->atomic.propsCached = true;
             connector->atomic.colorRange  = data.outputState.colorRange;
+            connector->atomic.bufferPos   = data.outputState.bufferPos;
             if (data.atomic.ctmd)
                 connector->crtc->atomic.ctmStateKnown = true;
         }

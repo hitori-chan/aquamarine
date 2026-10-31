@@ -645,7 +645,7 @@ bool Aquamarine::CWaylandOutput::destroy() {
 }
 
 bool Aquamarine::CWaylandOutput::test() {
-    return true; // TODO:
+    return state->state().bufferPos == Vector2D{};
 }
 
 bool Aquamarine::CWaylandOutput::commit() {
@@ -666,6 +666,11 @@ bool Aquamarine::CWaylandOutput::commit() {
 
     if (format == DRM_FORMAT_INVALID) {
         backend->backend->log(AQ_LOG_ERROR, std::format("Output {}: pending state rejected: invalid format", name));
+        return false;
+    }
+
+    if (STATE.bufferPos != Vector2D{}) {
+        backend->backend->log(AQ_LOG_ERROR, std::format("Output {}: pending state rejected: a placed buffer", name));
         return false;
     }
 

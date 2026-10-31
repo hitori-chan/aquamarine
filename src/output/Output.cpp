@@ -208,7 +208,12 @@ void Aquamarine::COutputState::setFormat(uint32_t drmFormat) {
 }
 
 void Aquamarine::COutputState::setBuffer(Hyprutils::Memory::CSharedPointer<IBuffer> buffer) {
-    internalState.buffer = buffer;
+    setBuffer(buffer, {});
+}
+
+void Aquamarine::COutputState::setBuffer(Hyprutils::Memory::CSharedPointer<IBuffer> buffer, const Hyprutils::Math::Vector2D& pos) {
+    internalState.buffer    = buffer;
+    internalState.bufferPos = pos;
     markCommitted(AQ_OUTPUT_STATE_BUFFER);
 }
 

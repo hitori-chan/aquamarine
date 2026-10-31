@@ -404,12 +404,13 @@ namespace Aquamarine {
 
             // last connector_state values successfully committed to the kernel. used
             // to skip re-emitting unchanged values on page-flips (see #265).
-            uint64_t          maxBpc      = 0;
-            uint64_t          colorspace  = 0;
-            uint16_t          contentType = 0;
-            uint32_t          crtcID      = 0;
-            bool              propsCached = false;
-            eOutputColorRange colorRange  = AQ_OUTPUT_COLOR_RANGE_AUTO;
+            uint64_t                  maxBpc      = 0;
+            uint64_t                  colorspace  = 0;
+            uint16_t                  contentType = 0;
+            uint32_t                  crtcID      = 0;
+            bool                      propsCached = false;
+            eOutputColorRange         colorRange  = AQ_OUTPUT_COLOR_RANGE_AUTO;
+            Hyprutils::Math::Vector2D bufferPos;
         } atomic;
 
         union UDRMConnectorProps {

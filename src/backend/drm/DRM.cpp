@@ -2775,8 +2775,9 @@ bool Aquamarine::CDRMOutput::commitState(bool onlyTest) {
     if (data.modeset && data.mainFB && swapchain && data.mainFB->buffer->size != MODE->pixelSize && swapchain->currentOptions().size == MODE->pixelSize) {
         if (auto newBuf = swapchain->next(nullptr); newBuf) {
             if (auto newFB = CDRMFB::create(newBuf, backend, nullptr); newFB && !newFB->dead) {
-                data.mainFB           = newFB;
-                acquiredModesetBuffer = true;
+                data.mainFB                = newFB;
+                data.outputState.bufferPos = {};
+                acquiredModesetBuffer      = true;
             } else
                 swapchain->rollback();
         }
