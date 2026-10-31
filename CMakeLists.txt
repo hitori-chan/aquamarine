@@ -69,8 +69,10 @@ target_include_directories(
   aquamarine
   PUBLIC "./include"
   PRIVATE "./src" "./src/include" "./protocols" "${CMAKE_BINARY_DIR}")
+# the fork's own soname: a binary built against it never loads the distro's
+# libaquamarine.so.14, whose structs are laid out without the fork's fields
 set_target_properties(aquamarine PROPERTIES VERSION ${AQUAMARINE_VERSION}
-                                            SOVERSION 14)
+                                            SOVERSION 14.fork)
 if(CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
   target_link_libraries(aquamarine OpenGL::EGL OpenGL::GLES3 PkgConfig::deps Threads::Threads)
 else()
